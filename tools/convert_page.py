@@ -470,6 +470,12 @@ for page in PAGES:
     tb = TreeBuilder(); tb.feed(extract_main(src))
     blocks = convert_blocks(tb.root, ctx)
     out = tidy(blocks)
+    if '<h2>' not in out:
+        h3s = re.findall(r'<h3>(.*?)</h3>', out)
+        if any(re.search(r'\d{4}', h) for h in h3s):
+            out = re.sub(r'<h3>([^<]*\d{4}.*?)</h3>', r'<h2>\1</h2>', out)
+        else:
+            out = out.replace('<h3>', '<h2>').replace('</h3>', '</h2>')
     dups = 0
     if page == 'sistercity':
         first = out.find('<h2>開催報告</h2>'); second = out.find('<h2>開催報告</h2>', first + 1)

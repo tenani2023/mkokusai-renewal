@@ -10,11 +10,11 @@
   --c-accent: #3894ce;         /* 既存サイトのアクセント青 */
   --c-sky: #e8f2fa;            /* 淡い青（既存 #e9eef7 相当） */
   --c-sky-2: #f4f8fb;
-  --c-green: #1f8a70;          /* 補助の緑（タグ・にほんご） */
+  --c-green: #17735d;          /* 補助の緑（タグ・にほんご）白地で 5.3:1 */
   --c-green-soft: #e3f3ed;
   --c-ink: #172a3a;
   --c-ink-2: #46596a;
-  --c-ink-3: #74869a;
+  --c-ink-3: #5c6d7f;          /* 補助テキスト 白地で 5.2:1 */
   --c-line: #d4e0ea;           /* 既存 #bdcfdc 相当 */
   --c-bg: #ffffff;
   --c-alert: #c0392b;          /* 重要なお知らせの強調（既存の赤字） */
@@ -86,7 +86,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .section-title { font-size: var(--fs-h2); color: var(--c-primary-deep); }
 .section-title .en {
   display: block; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.18em;
-  color: var(--c-accent); margin-bottom: 8px; text-transform: uppercase;
+  color: var(--c-primary); margin-bottom: 8px; text-transform: uppercase;
 }
 .section-lead { color: var(--c-ink-2); max-width: 38em; }
 
@@ -140,7 +140,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* 下層ページ見出し */
 .page-head { padding-block: clamp(32px, 5vw, 64px) clamp(24px, 4vw, 40px); background: linear-gradient(180deg, var(--c-sky) 0%, #fff 100%); }
 .page-head h1 { font-size: var(--fs-h1); color: var(--c-primary-deep); }
-.page-head .en { display: block; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.18em; color: var(--c-accent); margin-bottom: 10px; }
+.page-head .en { display: block; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.18em; color: var(--c-primary); margin-bottom: 10px; }
 
 /* ---------- スクロール時のフェードイン ---------- */
 .reveal { transition: opacity .7s var(--ease), transform .7s var(--ease); }
