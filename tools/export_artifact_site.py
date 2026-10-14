@@ -45,6 +45,11 @@ def inline_legacy(m):
     return f'src="data:{mt};base64,{data}"'
 
 def convert(html):
+    # 外部 CSS をインライン化
+    def repl_css(m):
+        p = os.path.join(DIST, m.group(1).lstrip('/'))
+        return '<style>' + open(p, encoding='utf-8').read() + '</style>' if os.path.exists(p) else ''
+    html = re.sub(r'<link rel="stylesheet" href="(/_astro/[^"]+\.css)">', repl_css, html)
     # ページ内リンク
     def repl_href(m):
         attr, val = m.group(1), m.group(2)
@@ -73,11 +78,6 @@ def convert(html):
     # 旧写真を data URI に
     html = re.sub(r'src="(/images/legacy/[^"]+)"', inline_legacy, html)
     html = re.sub(r'href="(/images/legacy/[^"]+)"', lambda m: 'href="#"', html)  # 拡大画像リンクは無効化
-    # 外部 CSS をインライン化
-    def repl_css(m):
-        p = os.path.join(DIST, m.group(1).lstrip('/'))
-        return '<style>' + open(p, encoding='utf-8').read() + '</style>' if os.path.exists(p) else ''
-    html = re.sub(r'<link rel="stylesheet" href="(/_astro/[^"]+\.css)">', repl_css, html)
     html = html.replace('href="img/favicon.svg"', 'href="#"')
     html = re.sub(r'<link rel="icon"[^>]*>', '', html)
     html = re.sub(r'<link rel="canonical"[^>]*>', '', html)
