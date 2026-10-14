@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import Page from '../layouts/Page.astro';
+import photo1 from '../assets/photos/japanese-class-2.jpg';
+import photo2 from '../assets/photos/japanese-class.jpg';
+
+// にほんごきょうしつ（既存 japanese.html の原文をそのまま掲載）
+const langs = [
+  { code: 'en', name: 'English', title: 'Moriyama Japanese Class', rows: [['Time', '1st and 4th Saturdays every month (10:00am～11:50am)'], ['Place', 'Moriyama Shimin Koryu Center(Opposite side of Moriyama city hall)'], ['Fee', 'Free (400yen for study materials per year )']], note: '※You can join the class anytime.' },
+  { code: 'pt', name: 'Português', title: 'Aula de japonês em Moriyama', rows: [['Data', '1º a 4º sábado (Das 10:00 a 11:50 da manhã)'], ['Local', 'Moiyama Shimin Koryu Center (frente à prefeitura)'], ['Taxa', 'Gratuita (Porém, o custo do material é de 400 yens por ano.)']], note: '※Poderá entrar em qualquer dia do ano.' },
+  { code: 'zh', name: '中文', title: '日语教室', rows: [['时间', '毎月的第一 ～ 第四周六（10:00～11:50）'], ['地点', '守山市民交流センター（市役所站前）'], ['讲课费', '免费 资料费1年400日元']], note: '※申请随时' },
+  { code: 'ko', name: '한국어', title: '일본어교실', rows: [['시 간', '매월 1번째～4번째 토요일 （오전10:00～11:50）'], ['장 소', '모리야마시민교류센터（산산모리야마） ＜시약소방면＞'], ['수업료', '무료（교재료 연간400엔）']], note: '※언제든지 참가 가능합니다.' },
+];
+---
+<Page title="にほんごきょうしつ" en="Moriyama Japanese Class ／ Aula de japonês em Moriyama ／ 日语教室 ／ 일본어교실" description="守山市国際交流協会の日本語教室のご案内。毎月第1〜第4土曜日、守山市民交流センターで開催。参加費無料（教材費年400円）。">
+  <section class="info">
+    <dl class="info__dl">
+      <div><dt>にちじ</dt><dd>まいつき だい１からだい4 どようび 10:00am～11:50am</dd></div>
+      <div><dt>ばしょ</dt><dd>もりやましみんこうりゅうセンター（しやくしょ むかい）１かい サロンルーム</dd></div>
+      <div><dt>おかね</dt><dd>むりょう（きょうざいひ ねんかん ４００えん）</dd></div>
+    </dl>
+    <div class="info__photos">
+      <Image src={photo1} alt="日本語教室の様子" width="320" height="238" />
+      <Image src={photo2} alt="日本語教室で学ぶ参加者" width="320" height="240" />
+    </div>
+  </section>
+
+  <ul class="langs" aria-label="各言語のご案内">
+    {langs.map((l) => (
+      <li class="lang" lang={l.code}>
+        <h2 class="lang__title"><span class="lang__name">{l.name}</span>{l.title}</h2>
+        <table>
+          <tbody>
+            {l.rows.map(([k, v]) => (<tr><th scope="row">{k}</th><td>{v}</td></tr>))}
+          </tbody>
+        </table>
+        <p class="lang__note">{l.note}</p>
+      </li>
+    ))}
+  </ul>
+
+  <div class="prose">
+    <h2>日本語教室について</h2>
+    <p>守山市国際交流協会では、毎月第１～４土曜日の午前中に日本語教室を行っております。<br />現在は初心者・初級・会話・各級試験対策に分かれて、吉川先生をはじめボランティアで日本語の指導をしています。<br />テキストは主に「みんなのにほんご」を使用していますが、日本語能力検定を受験する人には、試験に対応するテキストも準備しています。</p>
+    <p>見学も随時受け付けていますのでお気軽にお越しください。<br />いつからでも参加して頂けます。<br />参加費は無料ですが、資料代として1年に1度400円をいただきます。<br />場所は、国際交流協会事務局のある市民交流センター内です。</p>
+  </div>
+</Page>
+
+<style>
+  .info { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(20px, 4vw, 40px); align-items: start; padding: clamp(20px, 3vw, 32px); border-radius: var(--radius); background: linear-gradient(160deg, #1f8a70 0%, #16705b 100%); color: #fff; }
+  .info__dl { display: grid; gap: 14px; font-size: 1.0625rem; }
+  .info__dl div { display: grid; grid-template-columns: 5em 1fr; gap: 10px; }
+  .info__dl dt { font-weight: 700; opacity: 0.9; }
+  .info__photos { display: grid; gap: 10px; }
+  .info__photos img { width: 100%; border-radius: 10px; }
+  .langs { list-style: none; padding: 0; margin: 32px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .lang { padding: 20px 22px; border-radius: var(--radius); border: 1px solid var(--c-line); background: #fff; }
+  .lang__title { font-size: 1.125rem; color: var(--c-primary-deep); display: flex; flex-direction: column; gap: 2px; margin-bottom: 12px; }
+  .lang__name { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; color: var(--c-green); }
+  .lang table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+  .lang th, .lang td { padding: 8px 0; border-top: 1px solid var(--c-line); text-align: left; vertical-align: top; }
+  .lang th { width: 6em; font-weight: 700; color: var(--c-ink-2); padding-right: 8px; }
+  .lang__note { margin-top: 10px; font-size: 0.8125rem; color: var(--c-ink-2); }
+  .prose { margin-top: 40px; }
+  @media (max-width: 720px) {
+    .info { grid-template-columns: 1fr; }
+    .info__dl div { grid-template-columns: 1fr; gap: 0; }
+    .info__photos { grid-template-columns: 1fr 1fr; }
+    .langs { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+import Page from '../layouts/Page.astro';
+import { site } from '../data/site';
+
+// 通訳について（既存 portugues.html「くらしの相談」の各言語の原文をそのまま掲載）
+const blocks = [
+  {
+    lang: 'Português', code: 'pt',
+    text: ['Alguma vez pensou que precisa de intérprete em seu idioma para consultas e procedimentos na prefeitura? Nunca houve um caso que você não conseguiu transmitir bem uma consulta importante em japonês ou não intendeu bem o assunto explicado em japonês？', 'Em caso de consultas e procedimentos na prefeitura, a prefeitura de Moriyama oferece intérprete voluntário(a) ,desde que faça reserva de horário e dia com antecedência (Desde que coincide o desejo de ambas as partes) Primeiramente, consulte a Associação de Intercambio Internacional de Moriyama, dizendo o horário e o assunto a ser tratado.'],
+    contact: 'TEL/FAX 077-583-4653 （durante a semana9:00～16:30）',
+  },
+  {
+    lang: 'English', code: 'en',
+    text: ['Have you ever think you want an interpreter when you have procedures or consultation in City Hall?', 'You can book a volunteer interpreter in advance if you feel difficult to complete procedures or consultations in Moriyama City Office. Please feel free to contact us.'],
+    contact: 'TEL/FAX 077-583-4653（weekdays ９：００～１６：３０）',
+  },
+  {
+    lang: 'Español', code: 'es',
+    text: ['¿Necesita intérprete en su lengua materna en Ayuntamiento? ¿Ha tenido dificultad en expresarse en japonés?', 'En Ayuntamiento es posible reservar intérprete voluntario en caso de tener dificultades a la hora de hacer trámites o consultas en japonés. (Hay casos en que no podemos cumplir con su deseo) Consulte con nosotros la hora y el contenído ante todo.'],
+    contact: 'TEL/FAX 077-583-4653（Días laborales 9:00 ～16:30）',
+  },
+  {
+    lang: '中文', code: 'zh',
+    text: ['当您在市政府办理手续・咨询时，是否需要一个会讲母语的翻译？ 因为有语言障碍，所以想询问重要的事却无法用日语顺利表达，而且对方说的日语也不能很好地理解。', '在守山市政府用日语办手续或咨询时，如果有语言上的困难， 可以事先预约志愿者翻译和您一起前来。 （也许有做不周到的地方，请您谅解。） 首先，请您将办事的时间和内容告诉我们守山国际交流协会， 然后一起想办法。'],
+    contact: 'TEL/FAX 077-583-4653（平时９：００～１６：３０）',
+  },
+  {
+    lang: '한국어', code: 'ko',
+    text: ['시약소에서 수속과 상담을 할 때 모국어의 통역이 필요하다고 생각하십니까? 중요한 내용으로 상담을 할 때 일본어로 제대로 전달이 안되거나, 일본어로 설명을 들을 때 잘 이해가 안될 때가 있습니까?', '모리야마시약소에서 일본어로 수속이나 상담 중 곤란할 때 통역 자원봉사자에게 사전 예약을 해서 함께 방문하시는 것도 가능합니다. (예약은 희망자에 한 함.) 먼저, 시간과 업무 내용을 모리야마시국제교류회관에 연락하셔서 상담해 주십시오.'],
+    contact: 'TEL/FAX : 077-583-4653（평일 9:00~16:30）',
+  },
+];
+---
+<Page title="通訳について" en="Intérpretes ／ Interpreter ／ 翻译 ／ 통역 ／ Intérprete" description="守山市役所での手続き・相談のための通訳ボランティアのご案内（日本語・ポルトガル語・英語・スペイン語・中国語・韓国語）。">
+  <div class="prose">
+    <p class="lead-strong">市役所での通訳はMIFA（守山市国際交流協会）でご相談を</p>
+    <p>市役所での手続き・相談で母国語による通訳が欲しいと思ったことはありませんか？<br />大事な相談で伝えたいことが日本語でうまく伝えられなかったり、日本語で言っていることがよくわからなかったりしたことはありませんか？</p>
+    <p>守山市役所で日本語での手続きや相談が困難な場合、通訳ボランティアさんに事前に予約をして一緒にきてもらうことが可能です。（希望に沿えない場合もあり）<br />まずは時間や内容を私たち守山市国際交流協会にご相談ください。</p>
+    <p class="contact-line">
+      <span>TEL/FAX <a href={`tel:${site.tel}`}>{site.tel}</a>（{site.hours}）</span>
+      <span>MAIL <a href={`mailto:${site.email}`}>{site.email}</a></span>
+    </p>
+  </div>
+
+  <ul class="langs" aria-label="各言語のご案内">
+    {blocks.map((b) => (
+      <li class="lang" lang={b.code}>
+        <h2 class="lang__name">{b.lang}</h2>
+        {b.text.map((t) => <p>{t}</p>)}
+        <p class="lang__contact">{b.contact}<br />MAIL <a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </li>
+    ))}
+  </ul>
+</Page>
+
+<style>
+  .lead-strong { font-size: 1.25rem; font-weight: 700; color: var(--c-primary-deep); }
+  .contact-line { display: flex; flex-wrap: wrap; gap: 6px 28px; font-weight: 700; }
+  .contact-line a { text-decoration: none; }
+  .langs { list-style: none; padding: 0; margin-top: 40px; display: grid; gap: 16px; }
+  .lang { padding: clamp(20px, 3vw, 28px); border-radius: var(--radius); background: var(--c-sky-2); border: 1px solid var(--c-line); line-height: 1.8; }
+  .lang__name { font-size: 1.125rem; color: var(--c-primary-deep); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--c-line); }
+  .lang p + p { margin-top: 0.6em; }
+  .lang__contact { margin-top: 12px !important; font-weight: 700; color: var(--c-primary-deep); }
+</style>

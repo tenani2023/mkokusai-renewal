@@ -1,0 +1,511 @@
+---
+import { getCollection } from 'astro:content';
+import { Image, Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import topics from '../data/topics.json';
+
+import photoHula from '../assets/photos/hula-2025.jpg';
+import photoKauai from '../assets/photos/wagashi-kauai-2025.jpg';
+import photoAdrian from '../assets/photos/wagashi-adrian-2025.jpg';
+import cityKauai from '../assets/photos/city-kauai.jpg';
+import cityAdrian from '../assets/photos/city-adrian.jpg';
+import cityGongju from '../assets/photos/city-gongju.jpg';
+import yasanichi from '../assets/photos/yasashii-nihongo.jpg';
+
+const fmt = (d: Date) =>
+  `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+
+const news = (await getCollection('news', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
+
+// 概要ページ「主な事業」の原文をそのまま使用
+const activities = [
+  {
+    title: '姉妹都市交流',
+    body: '米国（ハワイ州カウアイ郡、ミシガン州エイドリアン市）、韓国（忠清南道公州市）。３つの姉妹都市との派遣と受入れを1年毎に行っております。',
+    href: '/sistercity/',
+  },
+  {
+    title: '外国人随時相談',
+    note: '＊多言語通訳による',
+    body: '要請に応じて随時行います。',
+    href: '/interpreter/',
+  },
+  {
+    title: '日本語教室',
+    body: '毎月4回開催（第１～第4土曜日 10:00～11:50）',
+    href: '/japanese/',
+  },
+  {
+    title: '高校生スピーチコンテスト',
+    body: 'スピーチコンテスト入賞者３名をハワイ州カウアイ郡に派遣（６日間）。現地の高校に通い交流を図ります。',
+    href: '/speech/',
+  },
+  {
+    title: 'MINNAのサロン',
+    body: 'いろいろな言語・音楽・食べ物を通して、お互いの文化の違いを知り、さまざまな国の人との異文化交流を図ります。外国の文化紹介、外国料理教室、バスツアーなどがあります。',
+    note: '※年に5回、主に日曜日開催',
+    href: '/eventnews/',
+  },
+  {
+    title: '国際交流の広場',
+    body: '日本人と外国籍住民との交流を通して国際理解を深めるために毎年開催しているイベントです。',
+    href: '/festival/',
+  },
+  {
+    title: '外国語講座',
+    body: '全6回の語学入門講座を行っています。R5年度はスペイン語、中国語、中級英会話講座を開催予定',
+    href: '/eventnews/',
+  },
+  {
+    title: 'ウィッシュプランナー制度',
+    body: '会員が主体となり、より自由な発想に基づいて企画・運営のできる制度',
+    href: '/files/mousikomisyo.pdf',
+    external: true,
+    linkLabel: '詳細・申込書（PDF）',
+  },
+];
+
+const cities = [
+  { name: 'ハワイ州カウアイ郡', en: 'Kauai, HI, U.S.A.', date: '昭和50（1975）年1月31日', img: cityKauai, desc: 'カウアイ島は「ガーデンアイランド」という愛称で呼ばれ、緑の影濃く、エキゾチックな自然の造形美を見ることができる島。' },
+  { name: 'ミシガン州エイドリアン市', en: 'Adrian, MI, U.S.A.', date: '平成元（1989）年8月3日', img: cityAdrian, desc: 'エイドリアン市はデトロイト市の南西約110kmに位置するミシガン州レナウイ郡の中心都市。森林があちこちに点在し、自然豊かな田園都市である。' },
+  { name: '忠清南道公州市（コンジュ）', en: 'Kongju, ChungchongnamDo, KOREA', date: '平成3（1991）年8月5日', img: cityGongju, desc: '大韓民国西部に位置する忠清南道（チュンチョンナムド）の都市。自然景観に恵まれた百済の古都、観光の名所としてよく知られています。' },
+];
+---
+<Base>
+  <!-- ===== メインビジュアル ===== -->
+  <section class="hero" id="top">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <p class="hero__eyebrow">{site.nameEn}</p>
+        <h1 class="hero__title">
+          <span class="w"><span class="u">守山市国際交流協会は、</span></span>
+          <span class="w"><span class="u">国際的で</span><span class="u">活気ある</span></span>
+          <span class="w"><span class="u">まちづくり・</span><span class="u">ひとづくりを</span><span class="u">目指し、</span></span>
+          <span class="w"><span class="u">姉妹都市や</span><span class="u">在住外国人との</span></span>
+          <span class="w"><span class="u">交流の普及に</span><span class="u">努めています。</span></span>
+        </h1>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="/eventnews/">
+            イベント・ニュースを見る
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="/concept/">協会について</a>
+        </div>
+        <dl class="hero__info">
+          <div><dt>TEL / FAX</dt><dd><a href={`tel:${site.tel}`}>{site.tel}</a><span class="hero__hours">（{site.hours}）</span></dd></div>
+          <div><dt>事務局</dt><dd>守山市民交流センター内（守山市役所向かい）</dd></div>
+        </dl>
+      </div>
+
+      <div class="hero__photos" aria-label="協会の活動写真">
+        <figure class="ph ph--a">
+          <Picture src={photoKauai} alt="うの家で和菓子作りを体験したカウアイ郡親善使節団と協会関係者の集合写真" widths={[480, 760, 1100]} sizes="(max-width: 860px) 100vw, 560px" formats={['avif', 'webp']} loading="eager" fetchpriority="high" />
+          <figcaption>2025年7月　カウアイ郡親善使節団と和菓子作り体験</figcaption>
+        </figure>
+        <figure class="ph ph--b">
+          <Picture src={photoHula} alt="レイを身に着けた子どもたちとフラダンサーの集合写真" widths={[360, 560, 800]} sizes="(max-width: 860px) 50vw, 270px" formats={['avif', 'webp']} loading="eager" />
+          <figcaption>2025年7月　フラダンス体験会</figcaption>
+        </figure>
+        <figure class="ph ph--c">
+          <Picture src={photoAdrian} alt="和菓子作り体験を終えたエイドリアン市親善使節団と参加者の集合写真" widths={[360, 560, 800]} sizes="(max-width: 860px) 50vw, 270px" formats={['avif', 'webp']} loading="eager" />
+          <figcaption>2025年7月　エイドリアン市親善使節団と和菓子作り体験</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TOPICS（重要なお知らせ） ===== -->
+  <section class="topics" aria-labelledby="topics-h">
+    <div class="container">
+      <div class="topics__box reveal">
+        <h2 class="topics__title" id="topics-h"><span class="en">Topics</span>お知らせ</h2>
+        <ul class="topics__list">
+          {topics.items.map((t) => (
+            <li>
+              {t.href ? <a href={t.href} set:html={t.text} /> : <span set:html={t.text} />}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEWS（新着情報） ===== -->
+  <section class="section news" aria-labelledby="news-h">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 class="section-title" id="news-h"><span class="en">News</span>新着情報</h2>
+        <a class="more" href="/news/">新着情報一覧</a>
+      </div>
+      <ul class="news__list reveal">
+        {news.map((n) => (
+          <li>
+            <a class="news__item" href={`/news/${n.id}/`}>
+              <time datetime={iso(n.data.date)}>{fmt(n.data.date)}</time>
+              <span class={`tag tag--${n.data.category}`}>{n.data.category}</span>
+              <span class="news__ttl">{n.data.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 活動紹介（主な事業） ===== -->
+  <section class="section section--tint activities" aria-labelledby="act-h">
+    <div class="container activities__grid">
+      <div class="activities__intro reveal">
+        <h2 class="section-title" id="act-h">主な事業</h2>
+        <p class="section-lead">
+          守山市国際交流協会は市民参加による国際交流を基調として、姉妹都市をはじめ諸外国の人々との相互理解の促進を図り、国際化時代に対応した地域社会の振興に寄与することを目的として設立した守山市の外郭団体です。
+        </p>
+        <a class="more" href="/concept/">概要を見る</a>
+      </div>
+      <ul class="activities__list">
+        {activities.map((a) => (
+          <li class="act reveal">
+            <h3 class="act__title">
+              {a.title}
+              {a.note && <small class="act__note">{a.note}</small>}
+            </h3>
+            <p class="act__body">{a.body}</p>
+            <a class="act__link" href={a.href} target={a.external ? '_blank' : undefined} rel={a.external ? 'noopener' : undefined}>
+              {a.linkLabel ?? '詳しく見る'}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 姉妹都市 ===== -->
+  <section class="section cities" aria-labelledby="cities-h">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title" id="cities-h">姉妹都市</h2>
+          <p class="section-lead">守山市国際交流協会では、現在３つの都市と姉妹都市提携を結んでおり、交換留学やお互いの都市への訪問等の国境を越えた交流を行っています。</p>
+        </div>
+        <a class="more" href="/sistercity/">姉妹都市交流の記録</a>
+      </div>
+      <ul class="cities__list">
+        {cities.map((c) => (
+          <li class="city reveal">
+            <Image class="city__img" src={c.img} alt="" width="160" height="120" />
+            <div class="city__body">
+              <h3 class="city__name">{c.name}<span class="city__en">{c.en}</span></h3>
+              <p class="city__date"><span>提携年月日</span>{c.date}</p>
+              <p class="city__desc">{c.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== にほんごきょうしつ・通訳 ===== -->
+  <section class="section support" aria-label="外国人住民のみなさまへ">
+    <div class="container support__grid">
+      <article class="support__card support__card--jp reveal">
+        <p class="support__langs" aria-hidden="true">Moriyama Japanese Class ／ Aula de japonês em Moriyama ／ 日语教室 ／ 일본어교실</p>
+        <h2 class="support__title">にほんごきょうしつ</h2>
+        <dl class="support__dl">
+          <div><dt>にちじ</dt><dd>まいつき だい１からだい4 どようび 10:00am～11:50am</dd></div>
+          <div><dt>ばしょ</dt><dd>もりやましみんこうりゅうセンター（しやくしょ むかい）１かい サロンルーム</dd></div>
+          <div><dt>おかね</dt><dd>むりょう（きょうざいひ ねんかん ４００えん）</dd></div>
+        </dl>
+        <p class="support__text">見学も随時受け付けていますのでお気軽にお越しください。いつからでも参加して頂けます。</p>
+        <a class="btn btn--light" href="/japanese/">にほんごきょうしつ のページへ</a>
+      </article>
+
+      <article class="support__card support__card--it reveal">
+        <p class="support__langs" aria-hidden="true">Intérpretes ／ Interpreter ／ 翻译 ／ 통역 ／ Intérprete</p>
+        <h2 class="support__title">通訳について</h2>
+        <p class="support__strong">市役所での通訳はMIFA（守山市国際交流協会）でご相談を</p>
+        <p class="support__text">守山市役所で日本語での手続きや相談が困難な場合、通訳ボランティアさんに事前に予約をして一緒にきてもらうことが可能です。（希望に沿えない場合もあり）まずは時間や内容を私たち守山市国際交流協会にご相談ください。</p>
+        <p class="support__contact">
+          <span>TEL/FAX <a href={`tel:${site.tel}`}>{site.tel}</a>（{site.hours}）</span>
+          <span>MAIL <a href={`mailto:${site.email}`}>{site.email}</a></span>
+        </p>
+        <a class="btn btn--light" href="/interpreter/">通訳のご案内（5言語）</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 会員・ボランティア募集 ===== -->
+  <section class="section section--tint join" aria-labelledby="join-h">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title" id="join-h">会員・ボランティア募集</h2>
+          <p class="section-lead">あなたの経験や特技、できることを活かしてみませんか？ 当協会はたくさんのボランティアの皆様の協力により成り立っております。</p>
+        </div>
+        <a class="more" href="/wanted/">募集の詳細</a>
+      </div>
+      <div class="join__grid">
+        <div class="join__card reveal">
+          <h3>協会会員募集</h3>
+          <p>事業運営を充実させるため、当協会活動趣旨にご賛同頂ける会員様を募集しております。当協会の活動趣旨にご賛同頂ける方なら、どなたでも入会頂けます。</p>
+          <dl class="join__fee">
+            <div><dt>一般会員（個人）</dt><dd>年会費 一口 2,000円</dd></div>
+            <div><dt>団体会員（法人・団体等）</dt><dd>年会費 一口 10,000円</dd></div>
+          </dl>
+          <a class="btn btn--ghost btn--sm" href="/files/members1.pdf" target="_blank" rel="noopener">入会申込書（PDF）</a>
+        </div>
+        <div class="join__card reveal">
+          <h3>ボランティア登録受付中</h3>
+          <ul class="join__types">
+            <li><strong>語学</strong>語学能力を活かし、協会が行う行事への協力</li>
+            <li><strong>ホームステイ</strong>海外から守山に来られるゲストを預かる</li>
+            <li><strong>文化紹介</strong>協会が主催するイベントや講座において日本又は各国の文化を紹介する</li>
+            <li><strong>事業支援</strong>協会が主催する事業において企画・運営協力</li>
+          </ul>
+          <p>まずは登録だけでもどうぞ！ ボランティアが初めてという方も大歓迎です！</p>
+          <a class="btn btn--ghost btn--sm" href="/files/volunteers2.pdf" target="_blank" rel="noopener">ボランティア登録票（PDF）</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 資料・SNS ===== -->
+  <section class="section links" aria-labelledby="links-h">
+    <div class="container">
+      <h2 class="section-title reveal" id="links-h">資料・関連リンク</h2>
+      <ul class="links__list">
+        <li class="reveal">
+          <a class="link-card link-card--doc" href="/files/yasanichi.pdf" target="_blank" rel="noopener">
+            <Image src={yasanichi} alt="" width="44" height="61" densities={[1, 2]} />
+            <span><strong>やさしい日本語パンフレット</strong><small>協会ボランティア有志により作成（PDF）</small></span>
+          </a>
+        </li>
+        <li class="reveal">
+          <a class="link-card" href="/files/bietnamgarbage.pdf" target="_blank" rel="noopener">
+            <span><strong>ごみカレンダー ベトナム語版</strong><small>PDF</small></span>
+          </a>
+        </li>
+        <li class="reveal">
+          <a class="link-card" href="/festival/">
+            <span><strong>国際交流の広場</strong><small>毎年3月頃に開催しているイベント</small></span>
+          </a>
+        </li>
+        <li class="reveal">
+          <a class="link-card" href="/link/">
+            <span><strong>リンク集</strong><small>団体会員・他市協会など</small></span>
+          </a>
+        </li>
+        <li class="reveal">
+          <a class="link-card" href={site.sns.facebook} target="_blank" rel="noopener">
+            <span><strong>Facebook</strong><small>守山市国際交流協会</small></span>
+          </a>
+        </li>
+        <li class="reveal">
+          <a class="link-card" href={site.sns.instagram} target="_blank" rel="noopener">
+            <span><strong>Instagram</strong><small>守山市国際交流協会</small></span>
+          </a>
+        </li>
+        <li class="reveal">
+          <a class="link-card" href={site.sns.nihongoSalon} target="_blank" rel="noopener">
+            <span><strong>にほんごサロン in Moriyama</strong><small>平日、にほんごサロンで、日本語教室を開催しています。</small></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---------- メインビジュアル ---------- */
+  .hero {
+    position: relative; overflow: hidden;
+    padding-block: clamp(40px, 6vw, 88px) clamp(48px, 6vw, 80px);
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(56, 148, 206, 0.22), transparent 60%),
+      linear-gradient(180deg, #eef5fb 0%, #ffffff 70%);
+  }
+  .hero__grid {
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px); align-items: center;
+  }
+  .hero__eyebrow {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; color: var(--c-accent);
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hero__title {
+    font-size: clamp(1.625rem, 1rem + 1.6vw, 2.125rem); line-height: 1.65; color: var(--c-primary-deep); letter-spacing: 0.03em;
+    text-wrap: initial;
+  }
+  .hero__title .u { display: inline-block; }
+  @media (min-width: 861px) { .hero__title .w { display: inline-block; } }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero__info {
+    display: flex; flex-wrap: wrap; gap: 10px 36px; margin-top: 36px;
+    padding-top: 24px; border-top: 1px solid var(--c-line); font-size: 0.9375rem;
+  }
+  .hero__info div { display: flex; flex-direction: column; gap: 2px; }
+  .hero__info dt { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; color: var(--c-ink-3); }
+  .hero__info dd a { font-size: 1.25rem; font-weight: 700; text-decoration: none; font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+  .hero__hours { font-size: 0.8125rem; color: var(--c-ink-2); margin-left: 4px; }
+
+  .hero__photos {
+    display: grid; grid-template-columns: 1.1fr 0.9fr; grid-template-rows: 1fr 1fr; gap: 14px;
+    position: relative;
+  }
+  .hero__photos::before {
+    content: ""; position: absolute; inset: -8% -6% -10% 10%; z-index: 0; border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+    background: linear-gradient(135deg, rgba(56, 148, 206, 0.18), rgba(31, 138, 112, 0.10));
+  }
+  .ph { position: relative; z-index: 1; margin: 0; overflow: hidden; border-radius: var(--radius); background: var(--c-sky); box-shadow: var(--shadow-md); }
+  .ph :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+  .ph:hover :global(img) { transform: scale(1.03); }
+  .ph--a { grid-row: 1 / 3; aspect-ratio: 4 / 5; }
+  .ph--b, .ph--c { aspect-ratio: 4 / 3; }
+  .ph--b :global(img) { object-position: 50% 60%; }
+  .ph figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 12px 10px;
+    font-size: 0.6875rem; line-height: 1.5; color: #fff; letter-spacing: 0.04em;
+    background: linear-gradient(180deg, transparent, rgba(13, 63, 110, 0.72));
+  }
+
+  /* ---------- TOPICS ---------- */
+  .topics { margin-top: -8px; position: relative; z-index: 2; }
+  .topics__box {
+    display: grid; grid-template-columns: 180px 1fr; gap: 20px 40px; align-items: start;
+    padding: clamp(24px, 3vw, 36px) clamp(20px, 3vw, 40px);
+    border: 1px solid var(--c-line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow-sm);
+  }
+  .topics__title { font-size: 1.25rem; color: var(--c-primary-deep); }
+  .topics__title .en { display: block; font-size: 0.75rem; letter-spacing: 0.18em; color: var(--c-accent); text-transform: uppercase; margin-bottom: 4px; }
+  .topics__list { display: grid; gap: 0; font-size: 0.9375rem; }
+  .topics__list li { position: relative; padding: 12px 0 12px 22px; }
+  .topics__list li + li { border-top: 1px dashed var(--c-line); }
+  .topics__list li::before {
+    content: ""; position: absolute; left: 2px; top: 1.1em; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--c-accent);
+  }
+  .topics__list :global(em) { font-style: normal; color: var(--c-alert); font-weight: 700; }
+  .topics__list a { color: var(--c-ink); }
+  .topics__list a:hover { color: var(--c-primary); }
+
+  /* ---------- NEWS ---------- */
+  .news__list { border-top: 1px solid var(--c-line); }
+  .news__list li { border-bottom: 1px solid var(--c-line); }
+  .news__item {
+    display: grid; grid-template-columns: 9.5em auto 1fr; align-items: center; gap: 8px 20px;
+    padding: 18px 8px; color: var(--c-ink); text-decoration: none; border-radius: 10px;
+    transition: background-color .2s var(--ease);
+  }
+  .news__item:hover { background: var(--c-sky-2); color: var(--c-primary); }
+  .news__item time { font-size: 0.875rem; color: var(--c-ink-2); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+  .news__ttl { font-weight: 500; line-height: 1.7; }
+  .news__item:hover .news__ttl { text-decoration: underline; text-underline-offset: 0.25em; }
+
+  /* ---------- 主な事業 ---------- */
+  .activities__grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+  .activities__intro { position: sticky; top: calc(var(--header-h) + 24px); display: grid; gap: 20px; justify-items: start; }
+  .activities__list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; border-top: 2px solid var(--c-primary-deep); }
+  .act { padding: 26px 0 28px; border-bottom: 1px solid var(--c-line); display: grid; gap: 10px; align-content: start; }
+  .act__title { font-size: 1.125rem; color: var(--c-primary-deep); display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+  .act__note { font-size: 0.75rem; font-weight: 500; color: var(--c-green); }
+  .act__body { font-size: 0.9375rem; color: var(--c-ink-2); line-height: 1.85; }
+  .act__link { font-size: 0.8125rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; justify-self: start; }
+  .act__link::after { content: "→"; transition: transform .25s var(--ease); }
+  .act__link:hover::after { transform: translateX(3px); }
+
+  /* ---------- 姉妹都市 ---------- */
+  .cities__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .city {
+    display: grid; gap: 18px; padding: 24px; border-radius: var(--radius); border: 1px solid var(--c-line); background: #fff;
+    transition: box-shadow .3s var(--ease), transform .3s var(--ease);
+  }
+  .city:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .city__img { width: 120px; height: 90px; object-fit: cover; border-radius: 10px; }
+  .city__name { font-size: 1.125rem; color: var(--c-primary-deep); }
+  .city__en { display: block; font-size: 0.75rem; font-weight: 500; color: var(--c-ink-3); letter-spacing: 0.06em; margin-top: 4px; }
+  .city__date { margin-top: 10px; font-size: 0.875rem; font-weight: 700; color: var(--c-primary); }
+  .city__date span { display: inline-block; margin-right: 8px; padding: 0 8px; border-radius: 4px; background: var(--c-sky); font-size: 0.6875rem; letter-spacing: 0.1em; color: var(--c-primary-deep); }
+  .city__desc { margin-top: 8px; font-size: 0.875rem; color: var(--c-ink-2); line-height: 1.8; }
+
+  /* ---------- にほんご・通訳 ---------- */
+  .support { padding-top: 0; }
+  .support__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .support__card {
+    display: grid; gap: 16px; justify-items: start; align-content: start;
+    padding: clamp(28px, 4vw, 44px); border-radius: var(--radius); color: #fff;
+  }
+  .support__card--jp { background: linear-gradient(160deg, #1f8a70 0%, #16705b 100%); }
+  .support__card--it { background: linear-gradient(160deg, #1668ad 0%, #0d3f6e 100%); }
+  .support__langs { font-size: 0.75rem; letter-spacing: 0.08em; opacity: 0.85; line-height: 1.6; }
+  .support__title { font-size: clamp(1.5rem, 2vw, 1.875rem); letter-spacing: 0.08em; }
+  .support__dl { display: grid; gap: 8px; font-size: 0.9375rem; }
+  .support__dl div { display: grid; grid-template-columns: 5em 1fr; gap: 8px; }
+  .support__dl dt { font-weight: 700; opacity: 0.9; }
+  .support__text { font-size: 0.9375rem; opacity: 0.95; }
+  .support__strong { font-weight: 700; font-size: 1.0625rem; }
+  .support__contact { display: grid; gap: 4px; font-size: 0.9375rem; font-weight: 500; }
+  .support__card a:not(.btn) { color: #fff; }
+  .support__card .btn { margin-top: 6px; }
+
+  /* ---------- 会員・ボランティア ---------- */
+  .join__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .join__card {
+    display: grid; gap: 16px; justify-items: start; align-content: start;
+    padding: clamp(24px, 3vw, 36px); border-radius: var(--radius); background: #fff; border: 1px solid var(--c-line);
+    font-size: 0.9375rem;
+  }
+  .join__card h3 { font-size: 1.25rem; color: var(--c-primary-deep); padding-left: 14px; border-left: 4px solid var(--c-accent); line-height: 1.3; }
+  .join__card p { color: var(--c-ink-2); }
+  .join__fee { display: grid; gap: 6px; width: 100%; }
+  .join__fee div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 12px; border-radius: 8px; background: var(--c-sky-2); }
+  .join__fee dt { font-weight: 700; }
+  .join__fee dd { font-variant-numeric: tabular-nums; color: var(--c-primary-deep); font-weight: 700; white-space: nowrap; }
+  .join__types { display: grid; gap: 8px; width: 100%; }
+  .join__types li { display: grid; grid-template-columns: 7em 1fr; gap: 10px; align-items: baseline; color: var(--c-ink-2); }
+  .join__types strong { display: inline-block; padding: 1px 10px; border-radius: 999px; background: var(--c-green-soft); color: var(--c-green); font-size: 0.8125rem; text-align: center; }
+
+  /* ---------- 資料・リンク ---------- */
+  .links .section-title { margin-bottom: 28px; }
+  .links__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .link-card {
+    display: flex; align-items: center; gap: 16px; height: 100%;
+    padding: 18px 20px; border-radius: var(--radius-sm); border: 1px solid var(--c-line); background: #fff;
+    color: var(--c-ink); text-decoration: none; transition: border-color .25s var(--ease), box-shadow .25s var(--ease);
+  }
+  .link-card:hover { border-color: var(--c-accent); box-shadow: var(--shadow-sm); color: var(--c-primary); }
+  .link-card strong { display: block; font-size: 0.9375rem; }
+  .link-card small { display: block; font-size: 0.75rem; color: var(--c-ink-3); margin-top: 2px; }
+  .link-card--doc :global(img) { width: 44px; height: auto; flex: none; border-radius: 3px; box-shadow: var(--shadow-sm); }
+  .link-card::after { content: "→"; margin-left: auto; color: var(--c-accent); }
+
+  /* ---------- レスポンシブ ---------- */
+  @media (max-width: 1024px) {
+    .activities__grid { grid-template-columns: 1fr; }
+    .activities__intro { position: static; }
+    .links__list { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 860px) {
+    .hero__grid { grid-template-columns: 1fr; }
+    .hero__photos { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; }
+    .ph--a { grid-column: 1 / 3; grid-row: 1; aspect-ratio: 16 / 10; }
+    .topics__box { grid-template-columns: 1fr; gap: 8px; }
+    .cities__list { grid-template-columns: 1fr; }
+    .city { grid-template-columns: 120px 1fr; }
+    .support__grid, .join__grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .news__item { grid-template-columns: auto auto; }
+    .news__ttl { grid-column: 1 / -1; }
+    .activities__list { grid-template-columns: 1fr; }
+    .links__list { grid-template-columns: 1fr; }
+    .join__types li { grid-template-columns: 1fr; gap: 4px; }
+    .join__types strong { justify-self: start; }
+    .support__dl div { grid-template-columns: 1fr; gap: 0; }
+  }
+  @media (max-width: 480px) {
+    .city { grid-template-columns: 1fr; }
+    .hero__actions .btn { width: 100%; }
+  }
+</style>

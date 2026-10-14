@@ -1,0 +1,87 @@
+# 守山市国際交流協会 記事管理（Sveltia CMS / Decap CMS 互換）
+# 公開時は backend.repo を協会名義の GitHub リポジトリに変更する。
+backend:
+  name: github
+  repo: tenani2023/mkokusai-renewal   # ← 公開時に協会名義へ変更
+  branch: main
+  base_url: https://mkokusai-cms-auth.example.workers.dev   # ← STEP 5 で設置する認証 Worker の URL
+  commit_messages:
+    create: "記事を作成: {{slug}}"
+    update: "記事を更新: {{slug}}"
+    delete: "記事を削除: {{slug}}"
+    uploadMedia: "画像を追加: {{path}}"
+    deleteMedia: "画像を削除: {{path}}"
+
+locale: ja
+site_url: https://mkokusai.org
+display_url: https://mkokusai.org
+logo_url: /favicon.svg
+
+media_folder: public/uploads   # 画像の保存先
+public_folder: /uploads        # 記事から画像を参照するパス
+
+# アップロード時に自動で軽量化（WebP・最大 2000px）
+media_libraries:
+  default:
+    config:
+      max_file_size: 10485760
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2000
+          height: 2000
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  - name: news
+    label: お知らせ・イベント
+    label_singular: 記事
+    folder: src/content/news
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{date | date('YYYY/MM/DD')}}　{{title}}"
+    sortable_fields: [date, title]
+    view_filters:
+      - label: 下書きのみ
+        field: draft
+        pattern: true
+      - label: 公開中のみ
+        field: draft
+        pattern: false
+    editor:
+      preview: true
+    fields:
+      - { label: タイトル, name: title, widget: string, hint: "例：第3回MINNAのサロン 参加者募集" }
+      - { label: 公開日, name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+      - label: カテゴリー
+        name: category
+        widget: select
+        options: [お知らせ, 参加者募集, 開催報告, 姉妹都市]
+        default: お知らせ
+      - { label: サムネイル画像, name: thumbnail, widget: image, required: false, hint: "一覧やSNSで表示される画像（任意）" }
+      - { label: 関連ページ, name: link, widget: string, required: false, hint: "例：/eventnews/　/speech/　/sistercity/　（任意）" }
+      - { label: 下書き（公開しない）, name: draft, widget: boolean, default: false, hint: "オンにすると公開されません" }
+      - label: 本文
+        name: body
+        widget: markdown
+        required: false
+        hint: "日時・場所・費用・申込方法などを入力。画像は「画像を挿入」ボタンから追加できます。"
+
+  - name: settings
+    label: トップページの設定
+    files:
+      - name: topics
+        label: お知らせ（TOPICS）
+        file: src/data/topics.json
+        fields:
+          - label: 表示する項目
+            name: items
+            widget: list
+            fields:
+              - { label: 文章, name: text, widget: text, hint: "強調したい部分は <em> と </em> で囲む" }
+              - { label: リンク先, name: href, widget: string, required: false, hint: "例：/wanted/（任意）" }

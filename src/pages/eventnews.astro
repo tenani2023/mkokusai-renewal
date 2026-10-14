@@ -1,0 +1,8 @@
+---
+import Page from '../layouts/Page.astro';
+// 既存 eventnews.html の本文（tools/convert_page.py で構造のみ整えたもの）
+import body from '../content/pages/eventnews.html?raw';
+---
+<Page title="イベント・ニュース" description="守山市国際交流協会のイベント募集情報と、MINNAのサロン・語学講座などの開催報告です。">
+  <div class="prose legacy" set:html={body} />
+</Page>

@@ -1,0 +1,50 @@
+---
+import Page from '../layouts/Page.astro';
+
+// 概要ページ（既存 concept.html の原文をそのまま使用）
+const projects = [
+  { title: '主な交流対象先（姉妹都市）', href: '/sistercity/', body: ['米国（ハワイ州カウアイ郡、ミシガン州エイドリアン市）', '韓国（忠清南道公州市）', '３つの姉妹都市との派遣と受入れを1年毎に行っております。'] },
+  { title: '外国人随時相談', note: '＊多言語通訳による', href: '/interpreter/', body: ['要請に応じて随時行います。'] },
+  { title: '日本語教室', href: '/japanese/', body: ['毎月4回開催（第１～第4土曜日 10:00～11:50）'] },
+  { title: '高校生スピーチコンテスト', href: '/speech/', body: ['スピーチコンテスト入賞者３名をハワイ州カウアイ郡に派遣（６日間）', '現地の高校に通い交流を図ります。'] },
+  { title: 'MINNAのサロン', href: '/eventnews/', body: ['いろいろな言語・音楽・食べ物を通して、お互いの文化の違いを知り、さまざまな国の人との異文化交流を図ります。', '外国の文化紹介、外国料理教室、バスツアーなどがあります。', '※年に5回、主に日曜日開催'] },
+  { title: '国際交流の広場', href: '/festival/', body: ['日本人と外国籍住民との交流を通して国際理解を深めるために毎年開催しているイベントです。'] },
+  { title: '外国語講座', href: '/eventnews/', body: ['全6回の語学入門講座を行っています。', 'R5年度はスペイン語、中国語、中級英会話講座を開催予定'] },
+  { title: 'ウィッシュプランナー制度', body: ['会員が主体となり、より自由な発想に基づいて企画・運営のできる制度'], pdf: '/files/mousikomisyo.pdf', pdfLabel: '詳細・申込書（PDF）' },
+];
+---
+<Page title="概要" en="Concept" description="守山市国際交流協会の設立目的と主な事業のご紹介です。">
+  <div class="prose">
+    <h2>設立目的</h2>
+    <p>守山市国際交流協会は市民参加による国際交流を基調として、姉妹都市をはじめ諸外国の人々との相互理解の促進を図り、国際化時代に対応した地域社会の振興に寄与することを目的として設立した守山市の外郭団体です。国際親善委員会、国際親善協会を経て、平成１５年に守山市国際交流協会と名を改め現在に至っています。</p>
+
+    <h2>主な事業</h2>
+    <dl class="projects">
+      {projects.map((p) => (
+        <div class="projects__item">
+          <dt>
+            {p.href ? <a href={p.href}>【{p.title}】</a> : <span>【{p.title}】</span>}
+            {p.note && <small>{p.note}</small>}
+          </dt>
+          <dd>
+            {p.body.map((line) => <p>{line}</p>)}
+            {p.pdf && <p class="buttons"><a class="btn btn--ghost btn--sm" href={p.pdf} target="_blank" rel="noopener">{p.pdfLabel}</a></p>}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</Page>
+
+<style>
+  .projects { display: grid; gap: 0; border-top: 1px solid var(--c-line); margin-top: 1.2em; }
+  .projects__item { display: grid; grid-template-columns: 15em 1fr; gap: 8px 24px; padding: 18px 0; border-bottom: 1px solid var(--c-line); }
+  .projects dt { font-weight: 700; color: var(--c-primary-deep); display: flex; flex-direction: column; gap: 2px; }
+  .projects dt a { text-decoration: none; }
+  .projects dt a:hover { text-decoration: underline; }
+  .projects dt small { font-size: 0.75rem; font-weight: 500; color: var(--c-green); }
+  .projects dd p { color: var(--c-ink-2); }
+  .projects dd p + p { margin-top: 0.2em; }
+  .projects dd .buttons { margin-top: 10px; }
+  @media (max-width: 640px) { .projects__item { grid-template-columns: 1fr; gap: 4px; } }
+</style>

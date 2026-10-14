@@ -1,0 +1,61 @@
+---
+import Page from '../layouts/Page.astro';
+
+// リンク集（既存 link.html の掲載順・表記を維持）
+const members = [
+  { name: '滋賀中央信用金庫 守山支店様', href: 'http://www.shigachushin.jp/' },
+  { name: 'レーク滋賀農業協同組合様', href: 'https://ja-lakeshiga.or.jp/' },
+  { name: '近江守山ライオンズクラブ様', href: 'http://om-lions.org/' },
+  { name: 'サンメディカル㈱様', href: 'http://www.sunmedical.co.jp/' },
+  { name: '㈱滋賀銀行 守山支店様', href: 'http://www.shigagin.com/' },
+  { name: '滋賀県立守山中学高等学校様', href: 'http://www.moriyama-h.shiga-ec.ed.jp/' },
+  { name: 'ダイハツディーゼル㈱ 守山工場様', href: 'http://www.dhtd.co.jp/ja/index.html' },
+  { name: '㈱田中水道様', href: 'https://tanakas.co.jp/' },
+  { name: '滋賀県守山野洲日韓親善協会様' },
+  { name: '三久保自動車販売㈱様', href: 'https://www.mikubosyoukai.co.jp/' },
+  { name: '守山商工会議所様', href: 'https://moriyama-cci.or.jp/' },
+  { name: '守山ロータリークラブ様', href: 'http://moriyama-rc.jp/index.php' },
+  { name: '立命館守山中学高等学校様', href: 'http://www.ritsumei.ac.jp/mrc/' },
+  { name: 'サイチ工業株式会社様', href: 'http://saichi-kk.co.jp' },
+];
+const others = [
+  { name: '滋賀県国際協会', href: 'http://www.s-i-a.or.jp/' },
+  { name: '滋賀県留学生交流推進会議', href: 'http://intl.ryukoku.ac.jp/zaigaku/kouryu.html' },
+  { name: '守山市ホームページ', href: 'http://www.city.moriyama.shiga.jp/' },
+  { name: '栗東国際交流協会（RIFA)', href: 'http://rifa.jp/' },
+  { name: '野洲市国際協会（YIFA)', href: 'http://www.yifashiga.org/' },
+  { name: '草津市国際交流協会（KIFA)', href: 'http://kifa-japan.org/' },
+  { name: '（公財）近江八幡市国際協会', href: 'https://www.oia2021.com/' },
+  { name: '湖南市国際協会', href: 'http://konan-ia.org/' },
+];
+---
+<Page title="リンク集" description="守山市国際交流協会の団体会員、他市の国際交流協会などへのリンク集です。">
+  <div class="prose">
+    <h2>守山市国際交流協会 団体会員様</h2>
+    <ul class="links">
+      {members.map((m) => (
+        <li>{m.href ? <a href={m.href} target="_blank" rel="noopener">{m.name}</a> : <span>{m.name}</span>}</li>
+      ))}
+    </ul>
+    <h2>他市協会、等</h2>
+    <ul class="links">
+      {others.map((m) => (
+        <li><a href={m.href} target="_blank" rel="noopener">{m.name}</a></li>
+      ))}
+    </ul>
+  </div>
+</Page>
+
+<style>
+  .links { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .links li { margin: 0; }
+  .links a, .links span {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px;
+    padding: 10px 16px; border: 1px solid var(--c-line); border-radius: var(--radius-sm); background: #fff;
+    color: var(--c-ink); text-decoration: none; font-size: 0.9375rem;
+  }
+  .links a::after { content: "↗"; color: var(--c-accent); font-size: 0.875rem; }
+  .links a:hover { border-color: var(--c-accent); color: var(--c-primary); box-shadow: var(--shadow-sm); }
+  .links span { color: var(--c-ink-2); }
+  @media (max-width: 640px) { .links { grid-template-columns: 1fr; } }
+</style>

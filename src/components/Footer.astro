@@ -1,0 +1,83 @@
+---
+import { Image } from 'astro:assets';
+import mark from '../assets/logo-mark-src.png';
+import { site, nav, subNav } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__org">
+      <a class="footer__brand" href="/">
+        <span class="footer__mark"><Image src={mark} alt="" width="40" height="33" densities={[1, 2]} /></span>
+        <span>
+          <span class="footer__name">{site.name}</span>
+          <span class="footer__en">{site.nameEn}</span>
+        </span>
+      </a>
+      <address class="footer__addr">
+        <p>{site.postal}<br />{site.address}</p>
+        <p class="footer__tel">
+          <span>TEL {site.tel}</span>
+          <span>FAX {site.fax}</span>
+        </p>
+        <p class="footer__hours">受付時間：{site.hours}</p>
+        <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </address>
+      <ul class="footer__sns" aria-label="SNS">
+        <li><a href={site.sns.facebook} target="_blank" rel="noopener">Facebook</a></li>
+        <li><a href={site.sns.instagram} target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href={site.sns.nihongoSalon} target="_blank" rel="noopener">にほんごサロン in Moriyama</a></li>
+      </ul>
+    </div>
+
+    <nav class="footer__nav" aria-label="フッターナビゲーション">
+      <ul>
+        {nav.map((n) => (<li><a href={n.href}>{n.label}</a></li>))}
+      </ul>
+      <ul>
+        {subNav.map((n) => (<li><a href={n.href}>{n.label}</a></li>))}
+        <li><a href="/files/yasanichi.pdf" target="_blank" rel="noopener">やさしい日本語パンフレット（PDF）</a></li>
+        <li><a href="/files/bietnamgarbage.pdf" target="_blank" rel="noopener">ごみカレンダー ベトナム語版（PDF）</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <small>copyright © {year} {site.copyright}</small>
+      <a class="totop" href="#top" aria-label="このページの先頭へ">このページの先頭へ</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--c-primary-deep); color: #fff; margin-top: auto; }
+  .footer a { color: #fff; }
+  .footer__grid {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px 64px;
+    padding-block: clamp(48px, 6vw, 72px) clamp(32px, 4vw, 48px);
+  }
+  .footer__brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+  .footer__mark { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 12px; background: #fff; flex: none; }
+  .footer__name { display: block; font-size: 1.125rem; font-weight: 700; letter-spacing: 0.06em; line-height: 1.3; }
+  .footer__en { display: block; font-size: 0.6875rem; letter-spacing: 0.08em; opacity: 0.75; margin-top: 2px; }
+  .footer__addr { font-style: normal; font-size: 0.9375rem; line-height: 1.8; margin-top: 20px; display: grid; gap: 6px; }
+  .footer__tel { display: flex; flex-wrap: wrap; gap: 4px 20px; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .footer__hours { font-size: 0.8125rem; opacity: 0.8; }
+  .footer__sns { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 18px; font-size: 0.875rem; font-weight: 700; }
+  .footer__nav { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 0.9375rem; }
+  .footer__nav ul { display: grid; gap: 2px; align-content: start; }
+  .footer__nav a { display: inline-block; padding: 6px 0; text-decoration: none; opacity: 0.9; }
+  .footer__nav a:hover { opacity: 1; text-decoration: underline; }
+  .footer__bottom { border-top: 1px solid rgba(255, 255, 255, 0.15); padding-block: 18px; }
+  .footer__bottom-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .footer__bottom small { font-size: 0.75rem; opacity: 0.75; }
+  .totop { font-size: 0.8125rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .totop::before { content: "↑"; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.5); }
+
+  @media (max-width: 860px) {
+    .footer__grid { grid-template-columns: 1fr; gap: 32px; }
+  }
+  @media (max-width: 480px) {
+    .footer__nav { grid-template-columns: 1fr; }
+  }
+</style>

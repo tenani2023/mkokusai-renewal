@@ -1,0 +1,32 @@
+# 旧URL → 新URL（Cloudflare Pages 用 301 リダイレクト）
+/index.html            /              301
+/concept.html          /concept/      301
+/eventnews.html        /eventnews/    301
+/japanese.html         /japanese/     301
+/portugues.html        /interpreter/  301
+/sistercity.html       /sistercity/   301
+/speech.html           /speech/       301
+/wanted.html           /wanted/       301
+/contact.html          /contact/      301
+/link.html             /link/         301
+/festival.html         /festival/     301
+# 旧スマートフォン版
+/sp1/                  /              301
+/sp1/index.html        /              301
+/sp1/topics.html       /news/         301
+/sp1/concept.html      /concept/      301
+/sp1/eventnews.html    /eventnews/    301
+/sp1/japanese.html     /japanese/     301
+/sp1/portugues.html    /interpreter/  301
+/sp1/sistercity.html   /sistercity/   301
+/sp1/speech.html       /speech/       301
+/sp1/wanted.html       /wanted/       301
+/sp1/contact.html      /contact/      301
+/sp1/link.html         /link/         301
+/sp1/festival.html     /festival/     301
+# 旧PDF（ルート直下）→ /files/
+/members1.pdf          /files/members1.pdf          301
+/volunteers2.pdf       /files/volunteers2.pdf       301
+/yasanichi.pdf         /files/yasanichi.pdf         301
+/bietnamgarbage.pdf    /files/bietnamgarbage.pdf    301
+/mousikomisyo.pdf      /files/mousikomisyo.pdf      301

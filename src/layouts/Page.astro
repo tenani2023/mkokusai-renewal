@@ -1,0 +1,100 @@
+---
+// 下層ページ共通レイアウト：ページ見出し＋パンくず＋本文
+import Base from './Base.astro';
+
+interface Props {
+  title: string;        // ページ名（パンくず・<title> 用）
+  heading?: string;     // 大見出し（省略時は title）
+  en?: string;          // 既存サイト由来の英語ラベル（任意）
+  lead?: string;        // リード文
+  description?: string;
+  crumbs?: { label: string; href?: string }[];
+  wide?: boolean;       // 本文を広めに
+}
+const { title, heading = title, en, lead, description, crumbs = [], wide = false } = Astro.props;
+---
+<Base title={title} description={description ?? lead}>
+  <div class="page-head" id="top">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <ol>
+          <li><a href="/">トップページ</a></li>
+          {crumbs.map((c) => (<li>{c.href ? <a href={c.href}>{c.label}</a> : c.label}</li>))}
+          <li aria-current="page">{title}</li>
+        </ol>
+      </nav>
+      <h1>{en && <span class="en">{en}</span>}{heading}</h1>
+      {lead && <p class="page-head__lead">{lead}</p>}
+    </div>
+  </div>
+  <div class:list={['container', 'page-body', { 'page-body--wide': wide }]}>
+    <slot />
+  </div>
+</Base>
+
+<style is:global>
+  .page-head__lead { max-width: 40em; margin-top: 16px; color: var(--c-ink-2); }
+  .page-body { max-width: 860px; padding-block: clamp(24px, 4vw, 48px) clamp(64px, 8vw, 112px); }
+  .page-body--wide { max-width: var(--container); }
+
+  /* ---------- 本文（移植コンテンツ） ---------- */
+  .prose { font-size: 1rem; line-height: 1.95; }
+  .prose > * + * { margin-top: 1.2em; }
+  .prose h2 {
+    font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.6rem); color: var(--c-primary-deep);
+    margin-top: 2.6em; padding-bottom: 12px; border-bottom: 2px solid var(--c-line); position: relative;
+  }
+  .prose h2::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 72px; height: 2px; background: var(--c-primary); }
+  .prose h3 {
+    font-size: 1.2rem; color: var(--c-primary-deep); margin-top: 2.4em;
+    padding-left: 14px; border-left: 4px solid var(--c-accent); line-height: 1.5;
+  }
+  .prose h3 a { text-decoration: none; }
+  .prose h3 a:hover { text-decoration: underline; }
+  .prose h4, .prose h5 { font-size: 1.05rem; color: var(--c-primary-deep); margin-top: 1.8em; }
+  .prose .eyebrow { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.08em; color: var(--c-accent); margin-top: 2.4em; margin-bottom: -1.6em; }
+  .prose .eyebrow + h3 { margin-top: 2em; }
+  .prose p { color: var(--c-ink); }
+  .prose .c-red { color: var(--c-alert); font-weight: 700; }
+  .prose .c-blue { color: var(--c-primary); font-weight: 700; }
+  .prose .c-green { color: var(--c-green); font-weight: 700; }
+  .prose h3 .c-red, .prose h3 .c-blue, .prose h3 .c-green { color: inherit; font-weight: inherit; }
+  .prose ul, .prose ol { padding-left: 1.4em; }
+  .prose ul { list-style: disc; }
+  .prose ol { list-style: decimal; }
+  .prose li + li { margin-top: 0.3em; }
+  .prose strong { font-weight: 700; }
+  .prose .caption { font-size: 0.8125rem; color: var(--c-ink-3); margin-top: 8px; line-height: 1.6; }
+  .prose .label { font-size: 0.9375rem; font-weight: 700; color: var(--c-primary-deep); margin-top: 1.6em; padding-left: 10px; border-left: 3px solid var(--c-line); line-height: 1.5; }
+  .prose .label + .gallery, .prose .label + .photo { margin-top: 10px; }
+  .prose .subtitle { font-weight: 700; color: var(--c-green); margin-top: 6px; }
+  .prose .buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  /* 写真ギャラリー */
+  .prose .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; list-style: none; padding: 0; margin-top: 16px; }
+  .prose .gallery li { margin: 0; }
+  .prose .gallery img, .prose .photo img {
+    width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; background: var(--c-sky);
+  }
+  .prose .gallery a, .prose .photo a { display: block; }
+  .prose .photo { margin: 16px 0 0; max-width: 320px; }
+  .prose .poster { margin: 16px 0 0; max-width: 220px; }
+  .prose .poster img { width: 100%; border-radius: 6px; box-shadow: var(--shadow-md); }
+  .prose .poster a { display: block; }
+  .prose p + .gallery, .prose p + .photo { margin-top: 10px; }
+
+  /* 表 */
+  .prose .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .prose table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+  .prose th, .prose td { padding: 10px 14px; border: 1px solid var(--c-line); vertical-align: top; text-align: left; }
+  .prose th { background: var(--c-sky-2); font-weight: 700; white-space: nowrap; }
+
+  /* 報告が多いページ向け：年ごとのまとまり */
+  .report { padding: clamp(20px, 3vw, 32px); border: 1px solid var(--c-line); border-radius: var(--radius); background: #fff; }
+  .report + .report { margin-top: 24px; }
+
+  @media (max-width: 720px) {
+    .prose .gallery { grid-template-columns: repeat(2, 1fr); }
+    .prose h3 { font-size: 1.1rem; }
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const fmt = (d: Date) => `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+const news = (await getCollection('news', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+<Base title="新着情報" description="守山市国際交流協会のお知らせ・イベント情報の一覧です。">
+  <div class="page-head">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <ol><li><a href="/">トップページ</a></li><li aria-current="page">新着情報</li></ol>
+      </nav>
+      <h1><span class="en">News</span>新着情報</h1>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container">
+      <ul class="list">
+        {news.map((n) => (
+          <li>
+            <a class="item" href={`/news/${n.id}/`}>
+              <time datetime={iso(n.data.date)}>{fmt(n.data.date)}</time>
+              <span class={`tag tag--${n.data.category}`}>{n.data.category}</span>
+              <span class="ttl">{n.data.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section { padding-top: 24px; }
+  .list { border-top: 1px solid var(--c-line); }
+  .list li { border-bottom: 1px solid var(--c-line); }
+  .item { display: grid; grid-template-columns: 9.5em auto 1fr; align-items: center; gap: 8px 20px; padding: 18px 8px; color: var(--c-ink); text-decoration: none; border-radius: 10px; }
+  .item:hover { background: var(--c-sky-2); color: var(--c-primary); }
+  .item time { font-size: 0.875rem; color: var(--c-ink-2); font-variant-numeric: tabular-nums; }
+  .ttl { font-weight: 500; }
+  @media (max-width: 640px) {
+    .item { grid-template-columns: auto auto; }
+    .ttl { grid-column: 1 / -1; }
+  }
+</style>

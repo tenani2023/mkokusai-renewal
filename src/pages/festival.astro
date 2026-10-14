@@ -1,0 +1,7 @@
+---
+import Page from '../layouts/Page.astro';
+import body from '../content/pages/festival.html?raw';
+---
+<Page title="国際交流の広場" description="毎年3月頃に開催している「国際交流の広場」の開催報告。アトラクション・食・交流・体験の4つの広場で異文化体験ができます。">
+  <div class="prose legacy" set:html={body} />
+</Page>

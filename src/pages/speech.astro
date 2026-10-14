@@ -1,0 +1,7 @@
+---
+import Page from '../layouts/Page.astro';
+import body from '../content/pages/speech.html?raw';
+---
+<Page title="スピーチコンテスト" heading="もりやま”夢”プロジェクト～高校生英語スピーチコンテスト～" description="もりやま”夢”プロジェクト 高校生英語スピーチコンテストの開催報告と、入賞者のハワイ州カウアイ郡派遣の記録。">
+  <div class="prose legacy" set:html={body} />
+</Page>

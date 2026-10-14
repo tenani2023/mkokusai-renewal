@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import mark from '../assets/logo-mark-src.png';
+import { site, nav, subNav } from '../data/site';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const mainNav = nav.filter((n) => n.href !== '/contact/' && n.href !== '/');
+---
+<header class="header">
+  <div class="header__inner container">
+    <a class="brand" href="/" aria-label={`${site.name} トップページ`}>
+      <Image class="brand__mark" src={mark} alt="" width="44" height="36" densities={[1, 2]} loading="eager" />
+      <span class="brand__text">
+        <span class="brand__name">{site.name}</span>
+        <span class="brand__en">{site.nameEn}</span>
+      </span>
+    </a>
+
+    <nav class="gnav" aria-label="グローバルナビゲーション">
+      <ul>
+        {mainNav.map((n) => (
+          <li>
+            <a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}>{n.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <a class="btn btn--primary btn--sm header__contact" href="/contact/">お問い合わせ</a>
+
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="drawer">
+      <span class="menu-btn__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="menu-btn__label">メニュー</span>
+    </button>
+  </div>
+
+</header>
+
+<style>
+  .header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(160%) blur(10px);
+    -webkit-backdrop-filter: saturate(160%) blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .header.is-compact { border-color: var(--c-line); box-shadow: 0 2px 16px rgba(13, 63, 110, 0.06); }
+  .header__inner {
+    width: min(100% - var(--gutter) * 2, 1320px);
+    display: flex; align-items: center; gap: 20px;
+    min-height: var(--header-h);
+    transition: min-height .3s var(--ease);
+  }
+  .header.is-compact .header__inner { min-height: 60px; }
+
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--c-primary-deep); flex: none; }
+  .brand__mark { width: 44px; height: auto; transition: width .3s var(--ease); }
+  .header.is-compact .brand__mark { width: 36px; }
+  .brand__text { display: flex; flex-direction: column; line-height: 1.2; }
+  .brand__name { font-size: 1.125rem; font-weight: 700; letter-spacing: 0.06em; }
+  .brand__en { font-size: 0.625rem; letter-spacing: 0.08em; color: var(--c-ink-3); margin-top: 3px; }
+
+  .gnav { margin-left: auto; }
+  .gnav ul { display: flex; gap: 0; }
+  .gnav a {
+    display: inline-block; padding: 8px 9px; border-radius: 8px; letter-spacing: 0;
+    font-size: 0.8125rem; font-weight: 500; color: var(--c-ink); text-decoration: none; white-space: nowrap;
+    position: relative; transition: color .2s var(--ease), background-color .2s var(--ease);
+  }
+  .gnav a::after {
+    content: ""; position: absolute; left: 9px; right: 9px; bottom: 4px; height: 2px; border-radius: 2px;
+    background: var(--c-primary); transform: scaleX(0); transform-origin: left; transition: transform .25s var(--ease);
+  }
+  .gnav a:hover { color: var(--c-primary); }
+  .gnav a:hover::after, .gnav a[aria-current="page"]::after { transform: scaleX(1); }
+  .gnav a[aria-current="page"] { color: var(--c-primary); font-weight: 700; }
+  .header__contact { flex: none; padding-inline: 20px; }
+
+  .menu-btn {
+    display: none; flex-direction: column; align-items: center; gap: 4px; margin-left: auto;
+    min-width: 56px; min-height: 48px; padding: 4px; border-radius: 10px; color: var(--c-primary-deep);
+  }
+  .menu-btn__bars { display: flex; flex-direction: column; gap: 5px; width: 24px; }
+  .menu-btn__bars i { height: 2px; background: currentColor; border-radius: 2px; transition: transform .3s var(--ease), opacity .3s var(--ease); }
+  .menu-btn__label { font-size: 0.625rem; font-weight: 700; letter-spacing: 0.08em; }
+  :global(body.menu-open) .menu-btn__bars i:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  :global(body.menu-open) .menu-btn__bars i:nth-child(2) { opacity: 0; }
+  :global(body.menu-open) .menu-btn__bars i:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  @media (max-width: 1399px) { .brand__en { display: none; } }
+  @media (max-width: 1239px) {
+    .gnav, .header__contact { display: none; }
+    .menu-btn { display: flex; }
+  }
+  @media (max-width: 480px) {
+    .brand__name { font-size: 1rem; }
+    .brand__en { display: none; }
+    .brand__mark { width: 40px; }
+  }
+</style>

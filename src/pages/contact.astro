@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import Page from '../layouts/Page.astro';
+import { site } from '../data/site';
+import map from '../assets/map.png';
+---
+<Page title="お問い合わせ" en="Contact us" lead="ご質問・お問合せはお気軽にTEL・FAXまたはメールにてご連絡ください。" description="守山市国際交流協会へのお問い合わせ先（TEL・FAX・メール・所在地）です。">
+  <div class="contact">
+    <dl class="contact__list">
+      <div>
+        <dt>TEL</dt>
+        <dd><a class="contact__big" href={`tel:${site.tel}`}>{site.tel}</a><span class="contact__note">（{site.hours}）</span></dd>
+      </div>
+      <div>
+        <dt>FAX</dt>
+        <dd><span class="contact__big">{site.fax}</span></dd>
+      </div>
+      <div>
+        <dt>MAIL</dt>
+        <dd><a class="contact__big contact__mail" href={`mailto:${site.email}`}>{site.email}</a></dd>
+      </div>
+      <div>
+        <dt>場所</dt>
+        <dd>滋賀県守山市守山２丁目16－45 守山市民交流センター内<span class="contact__note">（守山市役所向かい）</span></dd>
+      </div>
+    </dl>
+    <figure class="contact__map">
+      <Image src={map} alt="守山市民交流センター周辺の地図" width="640" densities={[1, 2]} />
+      <figcaption>〒524-0022 滋賀県守山市守山2丁目16-45 守山市民交流センター内</figcaption>
+    </figure>
+  </div>
+</Page>
+
+<style>
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 48px); align-items: start; }
+  .contact__list { display: grid; gap: 0; border-top: 1px solid var(--c-line); }
+  .contact__list div { display: grid; grid-template-columns: 5em 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--c-line); align-items: baseline; }
+  .contact__list dt { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.12em; color: var(--c-ink-3); }
+  .contact__list dd { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+  .contact__big { font-size: 1.375rem; font-weight: 700; color: var(--c-primary-deep); text-decoration: none; font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+  .contact__mail { font-size: 1.125rem; word-break: break-all; }
+  a.contact__big:hover { color: var(--c-primary); text-decoration: underline; }
+  .contact__note { font-size: 0.875rem; color: var(--c-ink-2); }
+  .contact__map { margin: 0; }
+  .contact__map img { width: 100%; border-radius: var(--radius); border: 1px solid var(--c-line); }
+  .contact__map figcaption { margin-top: 10px; font-size: 0.8125rem; color: var(--c-ink-2); }
+  @media (max-width: 720px) { .contact { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const news = await getCollection('news', ({ data }) => !data.draft);
+  return news.map((n) => ({ params: { id: n.id }, props: { entry: n } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data.date;
+const fmt = `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+---
+<Base title={entry.data.title}>
+  <div class="page-head">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <ol>
+          <li><a href="/">トップページ</a></li>
+          <li><a href="/news/">新着情報</a></li>
+          <li aria-current="page">{entry.data.title}</li>
+        </ol>
+      </nav>
+      <p class="meta">
+        <time datetime={d.toISOString().slice(0, 10)}>{fmt}</time>
+        <span class={`tag tag--${entry.data.category}`}>{entry.data.category}</span>
+      </p>
+      <h1>{entry.data.title}</h1>
+    </div>
+  </div>
+  <article class="section article">
+    <div class="container article__inner">
+      {entry.data.thumbnail && (
+        <img class="article__thumb" src={entry.data.thumbnail} alt="" loading="lazy" />
+      )}
+      <div class="prose"><Content /></div>
+      {entry.data.link && (
+        <p class="article__related"><a class="btn btn--primary" href={entry.data.link}>関連ページを見る</a></p>
+      )}
+      <p class="article__back"><a class="more" href="/news/">新着情報一覧へ戻る</a></p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .meta { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; font-size: 0.875rem; color: var(--c-ink-2); font-variant-numeric: tabular-nums; }
+  .page-head h1 { font-size: clamp(1.4rem, 1rem + 1.4vw, 2rem); }
+  .article { padding-top: 24px; }
+  .article__inner { max-width: 760px; }
+  .article__thumb { border-radius: var(--radius); margin-bottom: 32px; }
+  .prose :global(p) { margin-bottom: 1.2em; }
+  .prose :global(img) { border-radius: var(--radius-sm); margin-block: 1.2em; }
+  .prose :global(h2) { font-size: 1.25rem; color: var(--c-primary-deep); margin: 2em 0 0.8em; padding-left: 14px; border-left: 4px solid var(--c-accent); }
+  .prose :global(h3) { font-size: 1.125rem; margin: 1.6em 0 0.6em; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 1.4em; margin-bottom: 1.2em; list-style: revert; }
+  .article__related { margin-top: 32px; }
+  .article__back { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--c-line); }
+</style>
